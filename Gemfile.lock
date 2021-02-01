@@ -10,14 +10,17 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     racc (1.5.2)
+    require_all (1.5.0)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bundler
   nokogiri
   open-uri
   pry
+  require_all (~> 1.0)
 
 BUNDLED WITH
    2.2.4
