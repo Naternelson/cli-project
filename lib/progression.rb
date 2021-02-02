@@ -1,0 +1,3 @@
+class Progression
+    @@all = []
+end
