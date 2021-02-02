@@ -11,11 +11,16 @@ class Progression
       self.class.all << self  
     end
 
-    def new_from_array(hash)
+    def new_from_hash(hash)
         hash[:chords].each do |chord_string|
             return nil if !self.valid?(chord_string)
             @chords << Chord.new(chord: self.key, scale: chord_string, beats: hash[:beats])
         end
+    end
+
+    def create_from_hash(hash)
+        self.new_from_hash(hash)
+        self.save
     end
 
     def valid?(string)
