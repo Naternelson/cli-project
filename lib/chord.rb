@@ -22,8 +22,10 @@ class Chord
         "Vi" => {type: "Major", notes: [9,0,4]},
         "Vii" => {type: "Minor", notes: [11,2,5]}
     }
+    attr_accessor :beats
     attr_reader :chord, :scale, :root
-    def initialize(root:, scale:)
+    def initialize(root:, scale:, beats:)
+        self.beats = beats
         @root = NOTES[root]
         @scale = CHORDS[scale]
         chords_notes = self.scale.notes
