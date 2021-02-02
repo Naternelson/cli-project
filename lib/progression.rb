@@ -1,10 +1,11 @@
 class Progression
     @@all = []
 
-    attr_reader :key, :chords, 
+    attr_reader :key, :chords, :scores
     def initialize(key = "C")
         @key = key
         @chords = []
+        @scores = []
     end
 
     def save
