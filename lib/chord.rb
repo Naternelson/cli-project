@@ -16,7 +16,6 @@ class Chord
     }
     attr_accessor :beats
     attr_reader :chord, :scale, :root, :progression
-    @@all = []
     def initialize(root:, scale:, beats: = nil)
         self.beats = beats
         @root = NOTES[root]
@@ -24,7 +23,6 @@ class Chord
         chord_notes = self.scale[:notes]
         @chord = []
         self.make_chord(self.root, chord_notes)
-        @@all << self
     end
     def make_chord(base, chord_notes)
         chord_notes.each do |c|
