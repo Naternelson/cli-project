@@ -29,7 +29,7 @@ class Chord
         self.beats = beats
         @root = NOTES[root]
         @scale = CHORDS[scale]
-        chords_notes = self.scale.notes
+        chord_notes = self.scale[:notes]
         @chord = []
         self.make_chord(self.root, chord_notes)
         @@all << self

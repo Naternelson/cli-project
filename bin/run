@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require_relative '../config/environment'
 
-Scrapper.scrape_main_page
+foo = Chord.new(root: "A", scale: "iv", beats: 4)
