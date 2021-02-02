@@ -1,17 +1,9 @@
 class Chord
     NOTES = {
-        "A" => 0,
-        "A# / Bb" => 1,
-        "B" => 2,
-        "C" => 3,
-        "C# / Db" => 4,
-        "D" => 5,
-        "D# / Eb" => 6,
-        "E" => 7,
-        "F" => 8,
-        "F# / Gb" => 9,
-        "G" => 10,
-        "G# / Ab" => 11
+        "A" => 0, "A# / Bb" => 1,"B" => 2,
+        "C" => 3,"C# / Db" => 4,"D" => 5,
+        "D# / Eb" => 6,"E" => 7,"F" => 8,
+        "F# / Gb" => 9,"G" => 10,"G# / Ab" => 11
     }
     CHORDS = {
         "I" => {type: "Major", notes: [0, 4,7]},
@@ -23,9 +15,9 @@ class Chord
         "Vii" => {type: "Minor", notes: [11,2,5]}
     }
     attr_accessor :beats
-    attr_reader :chord, :scale, :root
+    attr_reader :chord, :scale, :root, :progression
     @@all = []
-    def initialize(root:, scale:, beats:)
+    def initialize(root:, scale:, beats: = nil)
         self.beats = beats
         @root = NOTES[root]
         @scale = CHORDS[scale]
@@ -44,5 +36,11 @@ class Chord
     end
     def self.all
         @all
+    end
+    def self.chords 
+        CHORDS
+    end
+    def self.notes 
+        NOTES
     end
 end
