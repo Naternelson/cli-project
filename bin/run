@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require_relative '../config/environment'
 
-foo = Chord.new(root: "A", scale: "iv", beats: 4)
+foo = Chord.new(root: "C", scale: "iv", beats: 4)

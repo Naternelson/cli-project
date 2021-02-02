@@ -42,5 +42,7 @@ class Chord
             self.chord << letter
         end
     end
-
+    def self.all
+        @all
+    end
 end
