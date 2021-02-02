@@ -26,6 +26,14 @@ class Progression
     def valid?(string)
         Chord.chords.keys.include?(string)
     end
+
+    def change_beats(chord:, beats:)
+        chord.beats = beats
+    end
+
+    def change_beats_for_all(beats)
+        self.chords.each {|chord| chord.beats=beats}
+    end
     def self.all
         @@all
     end
