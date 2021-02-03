@@ -9,20 +9,28 @@ class Progression
     end
 
     def save
-      self.class.all << self  
-    end
-
-    def new_from_hash(hash)
-        hash[:chords].each do |chord_string|
-            return nil if !self.valid?(chord_string)
-            @chords << Chord.new(root: self.key, scale: chord_string, beats: hash[:beats])
+        if !self.class.all.include?(self)
+            self.class.all << self  
         end
     end
 
-    def create_from_hash(hash)
-        self.new_from_hash(hash)
-        self.save
+    def new_from_string(string:, save: false)
+        @chords << Chord.new(root: self.key, scale: chord_string, beats: 4)
+        self.save if save == true
     end
+
+    def new_from_hash(hash:, save: false)
+        hash.each do |chord|
+            @chords << Chord.new(root: self.key, scale: chord[:chord_string], beats: chord[:beats])
+        end
+        self.save if save == true
+    end
+
+    def new_from_array(array:, beats: 4, save: false)
+        array.each {|chord_string| @chords << Chord.new(root: self.key, scale: chord_string, beats: beats)}
+        self.save if save == true
+    end
+
 
     def valid?(string)
         Chord.chords.keys.include?(string)

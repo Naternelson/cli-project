@@ -1,4 +1,26 @@
 #!/usr/bin/env ruby
 require_relative '../config/environment'
 
-foo = Chord.new(root: "C", scale: "iv", beats: 4)
+chord_1 = Chord.new(root: "C", scale: "iv", beats: 4)
+chord_2 = Chord.new(root: "D", scale: "iii", beats: 4)
+puts
+puts "CHORDS"
+puts
+puts "Chord 1, expect the root to be 'C' with the @chord to be [F,A,C]"
+p chord_1.chord
+p "Chord Letters match: #{chord_1.chord == ["F", "A", "C"]}"
+puts
+puts "Chord 2, expect the root to be 'D' with the @chord to be [F#, A, C#]"
+p chord_2.chord
+p "Chord Letters match: #{chord_2.chord == ["F# / Gb", "A", "C# / Db"]}"
+puts
+puts "PROGRESSIONS"
+puts
+prog_1 = Progression.new("E")
+puts "Prog 1, expect self.all = [], @chords = [], @scores = []"
+p "All: #{Progression.all}"
+p "Chords: #{prog_1.chords}"
+p "Scores: #{prog_1.scores}"
+puts
+prog_1.new_from_hash(["I"])
+p "Chords: #{prog_1.chords}"

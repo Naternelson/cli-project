@@ -15,8 +15,8 @@ class Chord
         "Vii" => {type: "Minor", notes: [11,2,5]}
     }
     attr_accessor :beats
-    attr_reader :chord, :scale, :root, :progression
-    def initialize(root:, scale:, beats: = nil)
+    attr_reader :chord, :scale, :root
+    def initialize(root:, scale:, beats:)
         self.beats = beats
         @root = NOTES[root]
         @scale = CHORDS[scale]
@@ -28,13 +28,11 @@ class Chord
         chord_notes.each do |c|
             note = c + base 
             note_value = note >= 12 ? (note % 12) : note 
-            letter = NOTES.index(note_value)
+            letter = NOTES.key(note_value)
             self.chord << letter
         end
     end
-    def self.all
-        @all
-    end
+ 
     def self.chords 
         CHORDS
     end

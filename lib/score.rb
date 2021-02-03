@@ -4,8 +4,7 @@ class Score
     @@all = []
     def initialize(attributes)
         attributes.each {|key, value| self.send(("#{key}="), value)}
-        @measures = [],
-        @progressions = []
+        @measures = []
     end
 
     def progressions
@@ -13,7 +12,11 @@ class Score
     end
 
     def add_measures_from_progression(:progression, :repeat = 1)
-
+        repeat.times {
+            progression.each do |chord|
+                self.measures << chord
+            end
+        }
     end
 
     def whole_measure?(chord)
