@@ -62,6 +62,10 @@ class Progression
     def chord_values(chords=self.chords)
         chords.collect{|chord| chord.value}
     end
+
+    def total_beats
+        self.chords.inject{|sum, chord| sum + chord.beats}
+    end
     def self.all
         @@all
     end

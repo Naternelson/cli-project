@@ -17,9 +17,11 @@ class Score
                 self.measures << chord
             end
         }
+        
     end
 
-    def whole_measure?(chord)
-        chord.beats == self.beats_per_measure
+    def progression_num_of_measures(progression)
+        (progression.total_beats / self.beats_per_measure.to_f).ceil
     end
+
 end
