@@ -14,22 +14,36 @@ class Progression
         end
     end
 
-    def new_from_string(string:, save: false)
-        @chords << Chord.new(root: self.key, scale: chord_string, beats: 4)
-        self.save if save == true
-    end
+    # def new_chords(argument:, beats: 4, save: false)
+    #     class_type = argument.class
+    #     case class_type
+    #     when Array 
+    #         new_from_array(:array => argument, :beats => beats, :save => save)
+    #     when Hash
+    #         new_from_hash(:hash => argument, :save => save)
+    #     when String 
+    #         new_from_string(:string => argument, :save => save)
+    #     end
+    # end
 
-    def new_from_hash(hash:, save: false)
-        hash.each do |chord|
+    # def new_from_string(string:, save: false)
+    #     @chords << Chord.new(root: self.key, scale: chord_string, beats: 4)
+    #     self.save if save == true
+    # end
+
+    def new_from_hash(hash)
+        # binding.pry
+        hash[:chords].each do |chord|
+            binding.pry
             @chords << Chord.new(root: self.key, scale: chord[:chord_string], beats: chord[:beats])
         end
-        self.save if save == true
+        self.save if hash[:save] == true
     end
 
-    def new_from_array(array:, beats: 4, save: false)
-        array.each {|chord_string| @chords << Chord.new(root: self.key, scale: chord_string, beats: beats)}
-        self.save if save == true
-    end
+    # def new_from_array(array:, beats: 4, save: false)
+    #     array.each {|chord_string| @chords << Chord.new(root: self.key, scale: chord_string, beats: beats)}
+    #     self.save if save == true
+    # end
 
 
     def valid?(string)

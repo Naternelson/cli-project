@@ -22,5 +22,22 @@ p "All: #{Progression.all}"
 p "Chords: #{prog_1.chords}"
 p "Scores: #{prog_1.scores}"
 puts
-prog_1.new_from_hash(["I"])
+hash = {
+    chords: [
+        {
+            chord_string: "I",
+            beats: 4
+        },
+        {
+            chord_string: "iii",
+            beats: 4
+        },
+        {
+            chord_string:"iv",
+            beats: 4
+        }
+    ],
+    save: true
+}
+prog_1.new_from_hash(hash)
 p "Chords: #{prog_1.chords}"
