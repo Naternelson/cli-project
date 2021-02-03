@@ -15,7 +15,7 @@ class Chord
         "Vii" => {type: "Minor", notes: [11,2,5]}
     }
     attr_accessor :beats
-    attr_reader :chord, :scale, :root
+    attr_reader :chord, :scale, :root, :value
     def initialize(root:, scale:, beats:)
         self.beats = beats
         @root = NOTES[root]
@@ -23,6 +23,7 @@ class Chord
         chord_notes = self.scale[:notes]
         @chord = []
         self.make_chord(self.root, chord_notes)
+        @value = self.scale[:type] == "Minor" ? "#{self.chord[0]} min" : self.chord[0]  
     end
     def make_chord(base, chord_notes)
         chord_notes.each do |c|
@@ -32,7 +33,10 @@ class Chord
             self.chord << letter
         end
     end
- 
+    
+    def self.chord_key(hash)
+        CHORDS.key(hash)
+    end
     def self.chords 
         CHORDS
     end

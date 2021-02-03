@@ -14,58 +14,40 @@ class Progression
         end
     end
 
-    # def new_chords(argument:, beats: 4, save: false)
-    #     class_type = argument.class
-    #     case class_type
-    #     when Array 
-    #         new_from_array(:array => argument, :beats => beats, :save => save)
-    #     when Hash
-    #         new_from_hash(:hash => argument, :save => save)
-    #     when String 
-    #         new_from_string(:string => argument, :save => save)
-    #     end
-    # end
-
-    # def new_from_string(string:, save: false)
-    #     @chords << Chord.new(root: self.key, scale: chord_string, beats: 4)
-    #     self.save if save == true
-    # end
-
+    #Creates new chords from the provided hash
     def new_from_hash(hash)
-        # binding.pry
         hash[:chords].each do |chord|
-            binding.pry
             @chords << Chord.new(root: self.key, scale: chord[:chord_string], beats: chord[:beats])
         end
         self.save if hash[:save] == true
+        self.chords
     end
 
-    # def new_from_array(array:, beats: 4, save: false)
-    #     array.each {|chord_string| @chords << Chord.new(root: self.key, scale: chord_string, beats: beats)}
-    #     self.save if save == true
-    # end
-
-
+    #Returns true if the provided scale string is a vaild scale
     def valid?(string)
         Chord.chords.keys.include?(string)
     end
 
+    #With a provided chord, changes the beat of that chord
     def change_beats(chord:, beats:)
         chord.beats = beats
     end
 
+    #Changes the beats for each chord to the same beat
     def change_beats_for_all(beats)
         self.chords.each {|chord| chord.beats=beats}
     end
 
+    #Copies the current chord structures and returns an array of transpose chords
     def transpose(key)
         new_chords = []
-        chords.each do |chord|
-            new_chords << Chord.new(root: key, scale: chord.scale, beats: chord.beats)
+        self.chords.each do |chord|
+            new_chords << Chord.new(root: key, scale: Chord.chord_key(chord.scale), beats: chord.beats)
         end
         new_chords
     end
 
+    #Changes the Instance Variables to the new chords
     def transpose_and_save(key)
         new_chords = self.transpose(key)
         self.delete_chords
@@ -75,6 +57,10 @@ class Progression
 
     def delete_chords
         @chords.clear
+    end
+
+    def chord_values(chords=self.chords)
+        chords.collect{|chord| chord.value}
     end
     def self.all
         @@all
