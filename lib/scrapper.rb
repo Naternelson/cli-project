@@ -7,7 +7,5 @@ class Scrapper
         chord_progressions = foo.collect {|prog| prog.text.split(/[ –-]+/)}.uniq! 
         
         fee = doc.css("div.entry-content ul")
-        
-        binding.pry
     end
 end
