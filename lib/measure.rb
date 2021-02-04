@@ -12,4 +12,7 @@ class Measure
     def valid_num_of_beats?(array)
         self.beats >= array.inject {|sum, chord| sum + chord.beats}
     end
+    def total_beats
+        self.chords.inject {|sum, chord| sum + chord.beats}
+    end
 end

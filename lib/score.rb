@@ -7,21 +7,26 @@ class Score
         @measures = []
     end
 
+    #Returns an array of associated Progressions
     def progressions
         Progressions.all.select {|prog| prog.score == self}
     end
 
+    #Adds new measures based off a progression, repeated 
     def add_measures_from_progression(:progression, :repeat = 1)
-        repeat.times {
-            progression.each do |chord|
-                self.measures << chord
+        count = 0
+        measure = nil
+        repeat.times {progression.chords.each do |chord|
+                measure ||= Measure.new(self.beats_per_measure)
+                measure.chords << chord
+                count += chord.beats
+                if count == self.beats_per_measure
+                    measure == nil
+                    count == 0
+                end
+                
             end
         }
-        
-    end
-
-    def progression_num_of_measures(progression)
-        (progression.total_beats / self.beats_per_measure.to_f).ceil
     end
 
 end
