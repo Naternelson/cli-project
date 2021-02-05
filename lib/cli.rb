@@ -69,24 +69,21 @@ class CLI
 
     def main_menu
         display_message(self.mm_message)
-        input = get_input
-        case input
-        when "1"
-            self.common_chords_menu
-        when "2"
-            self.scores_menu
-        when "3"
-            self.exit_app
-        when "main"
-            self.main_menu
-        when "exit"
-            self.exit_app
-        else
-            
-            self.main_menu
-        end
+        self.response(mm_options)
     end
 
+    def mm_options
+        [
+            method(:common_chords_menu),
+            method(:scores_menu),
+            method(:exit_app)
+        ]
+    end
+
+    def sm_options
+        [
+            method(:create_score)
+        ]
     def scores_menu
         display_message(scores_message)
         input = get_input
@@ -102,7 +99,7 @@ class CLI
         input = self.get_input.downcase
         return self.main_menu if input == "main"
         return self.exit_app if input =="exit"
-        options.each_with_index {|option, index| return option if (index+1).to_s == input}
+        options.each_with_index {|option, index| return option.call if (index+1).to_s == input}
         input_err_message(input)
         self.response(options)
     end
