@@ -1,5 +1,5 @@
 class CLI
-    DELAY = .5
+    DELAY = 0.05
     def initialize
         puts
         display_message(self.welcome_message, true)
@@ -19,12 +19,11 @@ class CLI
             "--To make a selection just type its number--"
         ]
     end
-
-    def display_message(array,delay = false)
-        array.each do |string|
-            puts string
-            sleep(DELAY) if delay == true
-        end
+    
+    def exit_app
+        puts
+        puts "Sad to see you go!"
+        puts
     end
 
     def help_message
@@ -36,33 +35,75 @@ class CLI
             ""
         ]
     end
+    def input_err_message(input)
+        display_message(["Sorry, #{input} is not a valid choice"])
+        display_message(help_message)
+    end
+
+    def scores_message
+        [
+            "",
+            "1. Create a New Score",
+            "2. Open a Score",
+            "3. Return to Main Menu"
+        ]
+    end
+
+    def display_message(array,delay = true)
+        array.each do |string|
+            puts string
+            sleep(DELAY) if delay == true
+        end
+    end
+
 
     def get_input
+        puts
         input = gets.chomp
         if input.downcase == "help"
             display_message(help_message)
-            self.get_input
+            input = self.get_input
         end
         input
     end
 
     def main_menu
-        display_message(self.mm_message, false)
-        case get_input
+        display_message(self.mm_message)
+        input = get_input
+        case input
         when "1"
+            self.common_chords_menu
         when "2"
+            self.scores_menu
         when "3"
+            self.exit_app
         when "main"
             self.main_menu
         when "exit"
             self.exit_app
         else
-            puts "Sorry, not a valid choice"
-            display_message(help_message)
+            
             self.main_menu
         end
     end
 
+    def scores_menu
+        display_message(scores_message)
+        input = get_input
+    end
+        
+    def common_chords_menu
+        puts "common chords"
+        self.main_menu
+    end
 
-
+    #Multi-Choice input and response method, implements the callback function if the input matches the index plus 1
+    def response(options)
+        input = self.get_input.downcase
+        return self.main_menu if input == "main"
+        return self.exit_app if input =="exit"
+        options.each_with_index {|option, index| return option if (index+1).to_s == input}
+        input_err_message(input)
+        self.response(options)
+    end
 end
