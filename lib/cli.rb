@@ -121,9 +121,37 @@ class CLI
         score = Score.new
         score.name = self.get_name_of_song
         score.artist = self.get_artist_of_song
-        score.bpm = self.get_song_bpm
+        score.beats_per_measure = self.get_song_bpm
         score.key = self.get_song_key
         score.add_empty_measures(self.get_measures)
+        self.scores << score
+        self.edit_score_menu(score)
+    end
+
+    def edit_menu_message(score)
+        [
+            "1. Create Progression",
+            "2. Add Progression to Song",
+            "3. Add Measure",
+            "4. Edit Measure",
+            "5. Edit Song Information"
+        ]
+    end
+
+    def score_information(score)
+        [
+            "SCORE INFORMATION",
+            "Name: #{score.name}",
+            "Artist: #{score.artist}",
+            "Key: #{score.key}",
+            "Beats Per Meausure: #{score.beats_per_measure}",
+            "Number of Measures: #{score.num_of_measures}"
+        ]
+    end
+
+    def edit_score_menu(score)
+        display_message(score_information(score))
+        display_message(edit_menu_message(score))
     end
 
     # Multi-Choice input and response method, implements the callback function if the input matches the index plus 1

@@ -1,9 +1,9 @@
 class Score
     attr_accessor :name, :artist
-    attr_reader :key, :beats_per_measure, :measures
+    attr_accessor :key, :beats_per_measure, :measures
     @@all = []
-    def initialize(attributes)
-        attributes.each {|key, value| self.send(("#{key}="), value)}
+    def initialize()#attributes)
+        # attributes.each {|key, value| self.send(("#{key}="), value)}
         @measures = []
     end
 
@@ -50,7 +50,7 @@ class Score
         arr = []
         self.measure[int.to_i -1].chords.each do |chord|
             hash = {
-                value: chord.value
+                value: chord.value,
                 beats: chord.beats
             }
             arr << hash
