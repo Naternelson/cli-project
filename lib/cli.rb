@@ -1,6 +1,8 @@
 class CLI
     DELAY = 0.05
+    attr_reader :scores
     def initialize
+        @scores = []
         puts
         display_message(self.welcome_message, true)
         puts
@@ -21,18 +23,14 @@ class CLI
     end
     
     def exit_app
-        puts
-        puts "Sad to see you go!"
-        puts
+        display_message(["Sad to see you go!"])
     end
 
     def help_message
         [
-            "",
             "To return to the main menu type 'main'",
             "To exit out of the application, type 'exit'",
-            "For help, type 'help'",
-            ""
+            "For help, type 'help'"
         ]
     end
     def input_err_message(input)
@@ -41,8 +39,8 @@ class CLI
     end
 
     def scores_message
+
         [
-            "",
             "1. Create a New Score",
             "2. Open a Score",
             "3. Return to Main Menu"
@@ -50,15 +48,18 @@ class CLI
     end
 
     def display_message(array,delay = true)
+        puts
         array.each do |string|
             puts string
             sleep(DELAY) if delay == true
         end
+        puts
     end
 
 
-    def get_input
+    def get_input(prompt=nil)
         puts
+        puts prompt if prompt
         input = gets.chomp
         if input.downcase == "help"
             display_message(help_message)
@@ -84,17 +85,48 @@ class CLI
         [
             method(:create_score)
         ]
+    end
+
+    #Scores Main Menu
     def scores_menu
         display_message(scores_message)
-        input = get_input
+        self.response(sm_options)
     end
-        
+         
     def common_chords_menu
         puts "common chords"
         self.main_menu
     end
 
-    #Multi-Choice input and response method, implements the callback function if the input matches the index plus 1
+    def get_name_of_song
+        self.get_input("What's the name of the Song?")
+    end
+
+    def get_artist_of_song
+        self.get_input("What is the artist name?")
+    end
+
+    def get_measures
+        self.get_input("How many measures are in this song?")
+    end
+
+    def get_song_bpm
+        self.get_input("How many beats per measure?")
+    end
+
+    def get_song_key
+        self.get_input("What is the key of the song?")
+    end
+    def create_score
+        score = Score.new
+        score.name = self.get_name_of_song
+        score.artist = self.get_artist_of_song
+        score.bpm = self.get_song_bpm
+        score.key = self.get_song_key
+        score.add_empty_measures(self.get_measures)
+    end
+
+    # Multi-Choice input and response method, implements the callback function if the input matches the index plus 1
     def response(options)
         input = self.get_input.downcase
         return self.main_menu if input == "main"
