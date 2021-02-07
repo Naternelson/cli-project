@@ -186,12 +186,11 @@ class CLI
             "1. Change Name of Song",
             "2. Change Name of Artist",
             "3. Change Key",
-            "4. Change BPM",
-            "5. Delete Song"
+            "4. Delete Song"
         ]
     end
     def song_options
-        [method(:change_name), method(:change_artist), method(:change_key), method(:change_bpm), method(:delete_song)]
+        [method(:change_name), method(:change_artist), method(:change_key), method(:delete_song)]
     end
     def edit_score_options
         [method(:make_progression),method(:add_progression),method(:delete_measures),method(:edit_song),nil]
@@ -200,6 +199,29 @@ class CLI
         display_message(song_message)
         response(song_options,score)
         self.edit_score_menu(score)
+    end
+    def change_name(score)
+        display_message(["Current Name",score.name])
+        input = get_input({prompt: "What would you like to rename this song to?"})
+        score.name = input
+        edit_score_menu(score)
+    end
+    def change_artist(score)
+        display_message(["Current Artist",score.artist])
+        input = get_input({prompt: "What would you like to rename the Artist to?"})
+        score.artist = input
+        edit_score_menu(score)
+    end
+    def change_key(score)
+        display_message(["Current key",score.key])
+        input = get_input({prompt: "What would you like to rename the Artist to?", match: "[A-G]"}) 
+        score.transpose
+        edit_score_menu(score)
+    end
+    def delete_song(score)
+        display_message(["Delete Song: #{score.name}"])
+        input = get_input({prompt: "Are you sure you want to delete?"})
+        input == 'y' ? self.scores_menu : self.edit_score_menu(score)
     end
     def edit_score_menu(score)
         display_message(score_information(score))

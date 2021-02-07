@@ -68,4 +68,8 @@ class Score
         end
         arr
     end
+    def transpose(key)
+        self.progressions.each {|prog| prog.transpose_and_save(key)
+        self.key = key
+    end
 end
