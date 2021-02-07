@@ -11,7 +11,7 @@ class Chord
         "iii" => {type: "Minor", notes: [4, 7, 11]},
         "iv" => {type: "Major", notes: [5, 9, 0]},
         "V" => {type: "Major", notes: [7,11,2]},
-        "Vi" => {type: "Major", notes: [9,0,4]},
+        "Vi" => {type: "Minor", notes: [9,0,4]},
         "Vii" => {type: "Minor", notes: [11,2,5]}
     }
     attr_accessor :beats
@@ -43,4 +43,7 @@ class Chord
     def self.notes 
         NOTES
     end
+    # def self.get_chord_value(key,scale)
+    #     self.chords[scale][:type] == "Minor" ? "#{self.chord[0]} min" : self.chord[0]  
+    # end
 end

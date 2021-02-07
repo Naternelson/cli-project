@@ -17,10 +17,18 @@ class Progression
     #Creates new chords from the provided hash
     def new_from_hash(hash)
         hash[:chords].each do |chord|
-            @chords << Chord.new(root: self.key, scale: chord[:chord_string], beats: chord[:beats])
+            self.chords << Chord.new(root: self.key, scale: chord[:chord_string], beats: chord[:beats])
         end
         self.save if hash[:save] == true
         self.chords
+    end
+
+    def add_chord(scale, beats)
+        self.chords << Chord.new(root:self.key, scale: scale, beats: beats)
+    end
+
+    def add_score(score)
+        self.scores << score
     end
 
     #Returns true if the provided scale string is a vaild scale
