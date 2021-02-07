@@ -31,11 +31,11 @@ hash = {
         },
         {
             chord_string: "iii",
-            beats: 4
+            beats: 2
         },
         {
             chord_string:"iv",
-            beats: 4
+            beats: 2
         }
     ],
     save: true
@@ -48,7 +48,7 @@ score = Score.new
 score.name = "Name"
 score.artist = "Artist"
 score.beats_per_measure = 4
-score.add_empty_measures(4)
+score.add_empty_measures(0)
 score.key = "C"
 
 prog_1 = Progression.new

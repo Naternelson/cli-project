@@ -57,12 +57,22 @@ class CLI
     end
 
 
-    def get_input(prompt=nil)
+    def get_input(params=nil)
         loop do
             puts
-            puts prompt if prompt
+            if params
+                puts params[:prompt] if params[:prompt]
+            end
             input = gets.chomp
-            break input if input != "help"
+            if input != "help"
+                if params
+                    if params[:match] != nil
+                        break input  if input.match(Regexp.new(params[:match]))
+                    end
+                else
+                    break input
+                end
+            end
             display_message(help_message)
         end
     end
@@ -98,7 +108,7 @@ class CLI
     end
 
     def get_measures
-        input = self.get_input("How many measures are in this song?")
+        input = self.get_input(prompt: "How many measures are in this song?")
         if input.to_i < 0 || input.match(/[a-z,A-Z]/)
             display_message(["Number of measures should be 0 or greater"])
             self.get_measures
@@ -107,7 +117,7 @@ class CLI
     end
 
     def get_song_bpm
-        input = self.get_input("How many beats per measure?")
+        input = self.get_input({prompt:"How many beats per measure?"})
         if !input.to_i.between?(1,16)
             display_message(["BPM should be between 1-16"])
             self.get_song_bpm
@@ -116,7 +126,7 @@ class CLI
     end
 
     def get_song_key
-        input = self.get_input("What is the key of the song?")
+        input = self.get_input({prompt: "What is the key of the song?"})
         if !input.upcase.match(/[A-G]/)
             display_message(["Key should be a letter between A and G"])
             self.get_song_key
@@ -126,8 +136,8 @@ class CLI
 
     def create_score
         score = Score.new
-        score.name = self.get_input("What's the name of the Song?")
-        score.artist = self.get_input("What is the artist name?")
+        score.name = self.get_input({prompt: "What's the name of the Song?"})
+        score.artist = self.get_input({prompt: "What is the artist name?"})
         score.beats_per_measure = self.get_song_bpm
         score.key = self.get_song_key
         score.add_empty_measures(self.get_measures)
@@ -139,9 +149,8 @@ class CLI
         [
             "1. Create Progression",
             "2. Add Progression to Song",
-            "3. Add Measure",
-            "4. Edit Measure",
-            "5. Edit Song Information",
+            "3. Delete Measures",
+            "4. Edit Song Information",
             "--To make a selection just type its number--"
         ]
     end
@@ -171,9 +180,26 @@ class CLI
             "Example: 1-4 (I chord for 4 beats)"
         ]
     end
-
+    def song_message
+        [
+            "Song Options",
+            "1. Change Name of Song",
+            "2. Change Name of Artist",
+            "3. Change Key",
+            "4. Change BPM",
+            "5. Delete Song"
+        ]
+    end
+    def song_options
+        [method(:change_name), method(:change_artist), method(:change_key), method(:change_bpm), method(:delete_song)]
+    end
     def edit_score_options
-        [method(:make_progression),method(:add_progression),nil,nil,nil]
+        [method(:make_progression),method(:add_progression),method(:delete_measures),method(:edit_song),nil]
+    end
+    def edit_song(score)
+        display_message(song_message)
+        response(song_options,score)
+        self.edit_score_menu(score)
     end
     def edit_score_menu(score)
         display_message(score_information(score))
@@ -181,9 +207,30 @@ class CLI
         self.response(edit_score_options,score)
     end
 
+    def delete_measures(score)
+        puts "Choose which measures to delete?"
+        s_m = get_input({prompt: "Starting measure?", match: "[0-9]+"})
+        e_m = get_input({prompt: "Ending measure?", match: "[0-9]+"})
+        score.delete_measures(s_m,e_m)
+        self.display_all_measures(score)
+        self.edit_score_menu(score)
+    end
+
     def add_progression(score)
         progressions = Progression.get_progressions_from_score(score)
         display_progressions(progressions)
+        choice = get_input({prompt: "Please choose a progression number", match: "[0-9]+"})
+        repeat = get_input({prompt: "How many times would you like this progression to repeat?", match: "[0-9]+"})
+        measure_num = score.num_of_measures == 0 ? 0 : get_input({prompt: "What measure would you like to start from?", match: "[0-9]+"})
+        score.add_measures_from_progression(progressions[choice.to_i-1],repeat.to_i)
+            puts "Added Measures"
+        self.display_all_measures(score)
+        self.scores_menu
+    end
+
+    def get_prog_choice
+        binding.pry
+        input = get_input({prompt: "Please choose a progression number", match: "[0-9]+"})
     end
     def make_progression(score)
         prog = Progression.new(score.key)
@@ -195,7 +242,7 @@ class CLI
     def create_prog(progression,score)
         chords = ["I", "ii", "iii", "iv", "V", "Vi", "Vii"]
         loop do 
-            input = get_input("What chord would you like to add? - Type 'stop' to finish the progression")
+            input = get_input({prompt: "What chord would you like to add? - Type 'stop' to finish the progression"})
             break input if input == "stop"
             if input.match(/[-]/)
                 string_arr = input.split("-")
@@ -233,18 +280,28 @@ class CLI
     end
 
     def display_progressions(arr)
+        # binding.pry
         arr.each_with_index do |pro,i|
             puts "#{i+1}. PROGRESSION"
-            self.display_measures_from_arr(pro.progression_list, pro.progression_list.count)
+            self.display_measures_from_arr(pro.progression_list)
             puts
         end
     end
-    def display_measures_from_arr(arr, count=4)
+
+    def display_all_measures(score)
+        measures = score.measures.collect {|m| m.measure_format}
+        display_message([score.name, "MEASURES"])
+        display_measures_from_arr(measures)
+        edit_score_menu(score)
+    end
+
+    def display_measures_from_arr(arr, count =arr.count)
         i = 0
         puts
         while i < count
             puts "    #{i+1}. #{arr[i]} "
             i+=1
+            sleep(DELAY)
         end
         puts "..." if arr.count > count 
     end

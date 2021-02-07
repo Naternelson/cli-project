@@ -19,15 +19,17 @@ class Score
     def add_measures_from_progression(progression, repeat =1)
         count = 0
         measure = nil
+        
         repeat.times {progression.chords.each do |chord|
-                measure ||= Measure.new(self.beats_per_measure)
-                measure.chords << chord
+                new_measure = measure ? self.measures.last : Measure.new(self.beats_per_measure)
+                new_measure.chords << chord
                 count += chord.beats
-                if count == self.beats_per_measure
-                    measure == nil
-                    count == 0
+                measure = true
+                if count >= self.beats_per_measure
+                    measure = nil
+                    count = 0
                 end
-                
+                self.measures << new_measure if !self.measures.include?(new_measure)
             end
         }
     end
@@ -35,6 +37,15 @@ class Score
         self.measures.count
     end
 
+    def delete_measures(start, end_measure)
+        start_index = start.to_i - 1
+        end_index = end_measure.to_i
+        i = start_index
+        while i < end_index
+            self.measures.delete_at(start_index)
+            i+=1
+        end
+    end
     def get_measure_by_number(measure_num, num_of_measures=1)
         i = measure_num.to_i - 1
         j = num_of_measures.to_i

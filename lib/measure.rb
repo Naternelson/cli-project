@@ -3,7 +3,7 @@ class Measure
     attr_reader :chords
     def initialize(num_of_beats)
         self.beats = num_of_beats
-        self.chords = []
+        @chords = []
     end
     def add_chords(array)
         array.each {|chord| self.chords << chord}
@@ -14,5 +14,13 @@ class Measure
     end
     def total_beats
         self.chords.inject {|sum, chord| sum + chord.beats}
+    end
+
+    def measure_format
+        arr = []
+        chords.each do |chord|
+            chord.beats.times{arr << chord.value}
+        end
+        "/ #{arr.join (" , ")} /"
     end
 end
