@@ -182,8 +182,8 @@ class CLI
     end
 
     def add_progression(score)
-        progresssions = Progressions.get_progressions_from_score(score)
-
+        progressions = Progression.get_progressions_from_score(score)
+        display_progressions(progressions)
     end
     def make_progression(score)
         prog = Progression.new(score.key)
@@ -213,6 +213,7 @@ class CLI
         save_prog = get_input("Would you like to save this progression? yes/no")
         if save_prog.downcase == "yes"
             progression.add_score(score)
+            progression.save
             puts "Progression saved"
         end
     end
@@ -229,5 +230,22 @@ class CLI
         end
         input_err_message(input)
         self.response(options)
+    end
+
+    def display_progressions(arr)
+        arr.each_with_index do |pro,i|
+            puts "#{i+1}. PROGRESSION"
+            self.display_measures_from_arr(pro.progression_list, pro.progression_list.count)
+            puts
+        end
+    end
+    def display_measures_from_arr(arr, count=4)
+        i = 0
+        puts
+        while i < count
+            puts "    #{i+1}. #{arr[i]} "
+            i+=1
+        end
+        puts "..." if arr.count > count 
     end
 end

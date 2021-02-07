@@ -80,4 +80,31 @@ class Progression
     def self.get_progressions_from_score(score)
         self.all.select {|prog| prog.scores.include?(score)}
     end
+
+    #Returns an array of chords in measure format
+    def progression_list(bpm=4)
+        arr = []
+        measure = []
+        self.chords.each do|chord|
+            num_of_beats = chord.beats
+            loop do
+                if num_of_beats > (bpm-measure.count)
+                    (bpm-measure.count).times{measure << chord.value}
+                    arr << "/ #{measure.join(" , ")} /"
+                    num_of_beats -= bpm
+                    measure = []
+                elsif num_of_beats == (bpm-measure.count)
+                    (bpm-measure.count).times{measure << chord.value}
+                    arr << "/ #{measure.join(" , ")} /"
+                    num_of_beats -= bpm
+                    measure = []
+                    break chord
+                else
+                    measure << num_of_beats.times{chord.value}
+                    break chord
+                end
+            end
+        end
+        arr
+    end
 end
