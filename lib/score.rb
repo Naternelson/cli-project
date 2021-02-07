@@ -32,7 +32,7 @@ class Score
         }
     end
     def num_of_measures
-        self.measures.count + 1
+        self.measures.count
     end
 
     def get_measure_by_number(measure_num, num_of_measures=1)

@@ -77,4 +77,7 @@ class Progression
     def self.all
         @@all
     end
+    def self.get_progressions_from_score(score)
+        self.all.select {|prog| prog.scores.include?(score)}
+    end
 end

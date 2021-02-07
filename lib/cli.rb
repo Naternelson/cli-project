@@ -58,15 +58,6 @@ class CLI
 
 
     def get_input(prompt=nil)
-        # puts
-        # puts prompt if prompt
-        # input = gets.chomp
-        # if input.downcase == "help"
-        #     display_message(help_message)
-        #     input = nil
-        #     self.get_input(prompt)
-        # end
-
         loop do
             puts
             puts prompt if prompt
@@ -74,8 +65,6 @@ class CLI
             break input if input != "help"
             display_message(help_message)
         end
-
-        # input
     end
 
     def main_menu
@@ -184,7 +173,7 @@ class CLI
     end
 
     def edit_score_options
-        [method(:make_progression),nil,nil,nil,nil]
+        [method(:make_progression),method(:add_progression),nil,nil,nil]
     end
     def edit_score_menu(score)
         display_message(score_information(score))
@@ -192,6 +181,10 @@ class CLI
         self.response(edit_score_options,score)
     end
 
+    def add_progression(score)
+        progresssions = Progressions.get_progressions_from_score(score)
+
+    end
     def make_progression(score)
         prog = Progression.new(score.key)
         display_message(create_progression_message)
@@ -201,18 +194,28 @@ class CLI
 
     def create_prog(progression,score)
         chords = ["I", "ii", "iii", "iv", "V", "Vi", "Vii"]
-        input = get_input("What chord would you like to add? - Type 'stop' to finish the progression")
-        if input.downcase != "stop"
-            string_arr = input.split("-")
-            progression.add_chord(chords[string_arr[0].strip.to_i - 1], string_arr[1].strip.to_i)
-            puts "#{progression.chords.last.value} - #{progression.chords.last.beats} beats"
-            create_prog(progression,score)
+        loop do 
+            input = get_input("What chord would you like to add? - Type 'stop' to finish the progression")
+            break input if input == "stop"
+            if input.match(/[-]/)
+                string_arr = input.split("-")
+                progression.add_chord(chords[string_arr[0].strip.to_i - 1], string_arr[1].strip.to_i)
+                puts "#{progression.chords.last.value} - #{progression.chords.last.beats} beats"
+            else
+                puts "Please use chord - beats notation (ie 1-4)"
+            end
         end
-        display_message(progression.chord_values)
-        input = get_input("Would you like to save this progression? yes/no")
-        progression.add_score(score) if input == "yes"
+        self.save_progression(progression,score)
     end
 
+    def save_progression(progression, score)
+        display_message(progression.chord_values)
+        save_prog = get_input("Would you like to save this progression? yes/no")
+        if save_prog.downcase == "yes"
+            progression.add_score(score)
+            puts "Progression saved"
+        end
+    end
     # Multi-Choice input and response method, implements the callback function if the input matches the index plus 1
     def response(options,params = nil)
         input = self.get_input.downcase
