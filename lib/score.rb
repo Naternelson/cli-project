@@ -41,6 +41,7 @@ class Score
     end
     def num_of_measures
         # self.chords.inject{|sum, el| sum + el.beats} /self.beats_per_measure
+        # binding.pry
         (self.chords.count / self.beats_per_measure.to_f).ceil
     end
 

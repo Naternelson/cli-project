@@ -209,7 +209,7 @@ class CLI
     end
 
     def get_song_bpm
-        input = self.get_input({prompt:"How many beats per measure?"})
+        input = self.get_input({prompt:"How many beats per measure?", match: "^[1-9]+$"})
         if !input.to_i.between?(1,16)
             display_message(["BPM should be between 1-16"])
             self.get_song_bpm
@@ -266,6 +266,7 @@ class CLI
         bpm = score ? score.beats_per_measure : 4
         self.common_progressions.each do|p|
             prog = Progression.new(key)
+            prog.save
             p.each {|scale| prog.add_chord(scale, bpm)}
             arr << prog
         end
@@ -297,6 +298,7 @@ class CLI
         display_progressions(progressions, score)
         all_prog = progressions + create_common_progressions(score)
         choice = get_input({prompt: "Please choose a progression number", match: "[0-9]+"})
+        all_prog[choice.to_i-1].add_score( self) if !all_prog[choice.to_i-1].scores.include?(self)
         repeat = get_input({prompt: "How many times would you like this progression to repeat?", match: "[0-9]+"})
         score.add_chords_from_progression(all_prog[choice.to_i-1],repeat.to_i)
         puts "Added Measures"
