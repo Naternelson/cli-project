@@ -13,9 +13,8 @@ class CLI
     def mm_message
         [
             "Main Menu",
-            "1. See and Learn about Common Chord Progressions",
-            "2. Create a New Score",
-            "3. Exit out of the Application",
+            "1. Create a New Score",
+            "2. Exit out of the Application",
             "--To make a selection just type its number--"
         ]
     end
@@ -27,6 +26,7 @@ class CLI
             "For help, type 'help'"
         ]
     end
+    
     def input_err_message(input)
         display_message(["Sorry, #{input} is not a valid choice"])
         display_message(help_message)
@@ -75,15 +75,15 @@ class CLI
     end
 
     def mm_options
-        [method(:common_chords_menu),method(:scores_menu),method(:exit_app)]
+        [method(:scores_menu), method(:exit_app)]
     end
 
 
-         
-    def common_chords_menu
-        puts "common chords"
-        self.main_menu
-    end
+       
+    # def common_chords_menu
+    #     puts "common chords"
+    #     self.main_menu
+    # end
 
 
     def response(options,params = nil)
@@ -143,6 +143,9 @@ class CLI
             "3. Change Key",
             "4. Delete Song"
         ]
+    end
+    def scores_message
+        ["SCORES", "1. Create a New Score", "2. Open Score", "3. Main Menu"]
     end
     ########
 
@@ -239,11 +242,34 @@ class CLI
 
 
     def display_progressions(arr,score=nil)
-        arr.each_with_index do |pro,i|
-            puts "#{i+1}. PROGRESSION"
+        i = 1
+        display_message(["-----", "User Progressions", "------"])
+        arr.each do |pro|
+            puts "#{i}. USER PROGRESSION"
             score ? display_message(pro.progression_list(score.beats_per_measure)) : display_message(pro.progression_list)
-            puts
+            i+=1
         end
+        self.display_common_progs(score, i)
+    end
+    def display_common_progs(score = nil, i =1)
+        progs = create_common_progressions(score)
+        display_message(["-----", "Common Chord Progressions from the Web", "------"])
+        progs.each do |pro|
+            puts "#{i}. COMMON PROGRESSION"
+            score ? display_message(pro.progression_list(score.beats_per_measure)) : display_message(pro.progression_list)
+            i+=1
+        end
+    end
+    def create_common_progressions(score=nil)
+        arr = []
+        key = score ? score.key : "C"
+        bpm = score ? score.beats_per_measure : 4
+        self.common_progressions.each do|p|
+            prog = Progression.new(key)
+            p.each {|scale| prog.add_chord(scale, bpm)}
+            arr << prog
+        end
+        arr
     end
 
     def display_all_measures(score)
@@ -269,9 +295,10 @@ class CLI
     def add_progression(score)
         progressions = Progression.get_progressions_from_score(score)
         display_progressions(progressions, score)
+        all_prog = progressions + create_common_progressions(score)
         choice = get_input({prompt: "Please choose a progression number", match: "[0-9]+"})
         repeat = get_input({prompt: "How many times would you like this progression to repeat?", match: "[0-9]+"})
-        score.add_chords_from_progression(progressions[choice.to_i-1],repeat.to_i)
+        score.add_chords_from_progression(all_prog[choice.to_i-1],repeat.to_i)
         puts "Added Measures"
         self.display_all_measures(score)
         self.scores_menu
@@ -285,7 +312,7 @@ class CLI
     end
 
     def create_prog(progression,score)
-        chords = ["I", "ii", "iii", "iv", "V", "Vi", "Vii"]
+        chords = Chord.chords.keys
         loop do 
             input = get_input({prompt: "What chord would you like to add? - Type 'stop' to finish the progression"})
             break input if input == "stop"

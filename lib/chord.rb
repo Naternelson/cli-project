@@ -9,10 +9,10 @@ class Chord
         "I" => {type: "Major", notes: [0, 4,7]},
         "ii" => {type: "Minor", notes: [2, 5, 9]},
         "iii" => {type: "Minor", notes: [4, 7, 11]},
-        "iv" => {type: "Major", notes: [5, 9, 0]},
+        "IV" => {type: "Major", notes: [5, 9, 0]},
         "V" => {type: "Major", notes: [7,11,2]},
-        "Vi" => {type: "Minor", notes: [9,0,4]},
-        "Vii" => {type: "Minor", notes: [11,2,5]}
+        "vi" => {type: "Minor", notes: [9,0,4]},
+        "vii" => {type: "Minor", notes: [11,2,5]}
     }
     # attr_accessor :beats
     attr_reader :chord, :scale, :root, :value

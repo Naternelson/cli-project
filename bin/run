@@ -55,8 +55,8 @@ hash = {
 # prog_1.new_from_hash(hash)
 # prog_1.add_score(score)
 
-# foo = CLI.new
+foo = CLI.new
 # foo.scores << score
 # foo.edit_score_menu(score)
-foo = Scrapper.scrape_main_page
-binding.pry
+# foo = Scrapper.scrape_main_page
+# binding.pry
