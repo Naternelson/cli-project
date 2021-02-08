@@ -79,13 +79,6 @@ class CLI
     end
 
 
-       
-    # def common_chords_menu
-    #     puts "common chords"
-    #     self.main_menu
-    # end
-
-
     def response(options,params = nil)
         input = self.get_input.downcase
         return self.main_menu if input == "main"

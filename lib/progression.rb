@@ -36,10 +36,6 @@ class Progression
         Chord.chords.keys.include?(string)
     end
 
-    # #With a provided chord, changes the beat of that chord
-    # def change_beats(chord:, beats:)
-    #     chord.beats = beats
-    # end
 
     #Changes the beats for each chord to the same beat
     def change_beats_for_all(beats)
@@ -48,12 +44,9 @@ class Progression
 
     #Copies the current chord structures and returns an array of transpose chords
     def transpose(key)
-        # new_chords = []
         self.chords.each do |chord|
-            # new_chords << 
             chord.transpose(key)
         end
-        # new_chords
     end
 
     #Changes the Instance Variables to the new chords
@@ -61,7 +54,6 @@ class Progression
         self.transpose(key)
         # self.delete_chords
         @key = key
-        # @chords = new_chords
     end
 
     def delete_chords
@@ -84,36 +76,7 @@ class Progression
 
     #Returns an array of chords in measure format
     def progression_list(bpm=4)
-
-        # arr = []
-        # measure = []
-        # self.chords.each do|chord|
-        #     num_of_beats = chord.beats
-        #     loop do
-        #         if num_of_beats > (bpm-measure.count)
-        #             # binding.pry
-        #             (bpm-measure.count).times{measure << chord.value}
-        #             arr << "/ #{measure.join(" , ")} /"
-        #             num_of_beats -= bpm
-        #             measure = []
-        #         elsif num_of_beats == (bpm-measure.count)
-        #             # binding.pry
-        #             (bpm-measure.count).times{measure << chord.value}
-        #             arr << "/ #{measure.join(" , ")} /"
-        #             num_of_beats -= bpm
-        #             measure = []
-        #             break chord
-        #         else
-        #             # binding.pry
-        #             num_of_beats.times{measure << chord.value}
-        #             num_of_beats -=bpm
-        #             break chord
-        #         end
-        #     end
-        # end
-
         arr = []
-
         measure = []
         self.chords.each do |chord|
             measure << chord.value
