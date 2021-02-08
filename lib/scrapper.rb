@@ -5,7 +5,5 @@ class Scrapper
         doc = Nokogiri::HTML(open(URL))
         foo = doc.css("h3 span.cn")
         chord_progressions = foo.collect {|prog| prog.text.split(/[ –-]+/)}.uniq! 
-        
-        fee = doc.css("div.entry-content ul")
     end
 end

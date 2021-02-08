@@ -6,7 +6,9 @@ class Measure
         @chords = []
     end
     def add_chords(array)
-        array.each {|chord| self.chords << chord}
+        array.each do |chord| 
+            self.chords << chord
+        end
     end
 
     def valid_num_of_beats?(array)
@@ -19,7 +21,7 @@ class Measure
     def measure_format
         arr = []
         chords.each do |chord|
-            chord.beats.times{arr << chord.value}
+            self.beats.times{arr << chord.value}
         end
         "/ #{arr.join (" , ")} /"
     end

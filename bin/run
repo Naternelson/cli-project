@@ -44,17 +44,19 @@ hash = {
 # puts "Chords: #{prog_1.chords}"
 # puts "Chords: #{prog_1.chord_values}"
 
-score = Score.new
-score.name = "Name"
-score.artist = "Artist"
-score.beats_per_measure = 4
-score.add_empty_measures(0)
-score.key = "C"
+# score = Score.new
+# score.name = "Name"
+# score.artist = "Artist"
+# score.beats_per_measure = 4
+# # score.add_empty_measures(0)
+# score.key = "C"
 
-prog_1 = Progression.new
-prog_1.new_from_hash(hash)
-prog_1.add_score(score)
+# prog_1 = Progression.new
+# prog_1.new_from_hash(hash)
+# prog_1.add_score(score)
 
-foo = CLI.new
-foo.scores << score
-foo.edit_score_menu(score)
+# foo = CLI.new
+# foo.scores << score
+# foo.edit_score_menu(score)
+foo = Scrapper.scrape_main_page
+binding.pry
