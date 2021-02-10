@@ -24,7 +24,7 @@ class Progression
     end
 
     def add_chord(scale, beats)
-        beats.times{self.chords << Chord.new(root:self.key, scale: scale)}
+        beats.to_i.times{self.chords << Chord.new(root:self.key, scale: scale)}
     end
 
     def add_score(score)
@@ -80,12 +80,12 @@ class Progression
         measure = []
         self.chords.each do |chord|
             measure << chord.value
-            if measure.count == bpm
+            if measure.count == bpm.to_i
                 arr << "  / #{measure.join(" , ")} /"
                 measure = []
             end
             if self.chords.last == chord && measure.count != 0
-                until measure.count == bpm
+                until measure.count == bpm.to_i
                     measure << " "
                 end
                 arr << "  / #{measure.join(" , ")} /"

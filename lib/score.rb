@@ -23,8 +23,8 @@ class Score
 
     def delete_measures(start, end_measure)
 
-        start_index = (start.to_i * self.beats_per_measure)-self.beats_per_measure-1
-        end_index = (end_measure.to_i * self.beats_per_measure)-1
+        start_index = (start.to_i * self.beats_per_measure.to_i)-self.beats_per_measure.to_i-1
+        end_index = (end_measure.to_i * self.beats_per_measure.to_i)-1
         i = start_index
         while i < end_index
             self.chords.delete_at(start_index)
@@ -52,15 +52,16 @@ class Score
         i = 1
         arr = []
         measure = []
+        binding.pry
         self.chords.each do |chord|
             measure << chord.value
-            if measure.count == self.beats_per_measure
+            if measure.count == self.beats_per_measure.to_i
                 arr << "  #{i}. / #{measure.join(" , ")} /"
                 measure = []
                 i +=1
             end
             if chord == self.chords.last && measure.count != 0
-                until measure.count == self.beats_per_measure
+                until measure.count == self.beats_per_measure.to_i
                     measure << " "
                 end
                 arr << "  #{i}. / #{measure.join(" , ")} /"
