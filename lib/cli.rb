@@ -102,7 +102,7 @@ class CLI
 
 
     def welcome_message
-        ["Welcome to my app!","This app will help you construct a chord scafold for a music score." , "Here you can puruse commonly used chord progression, create your own progressions and build your own score based off the progressions of your choice."] 
+        ["Welcome to my app!","This app will help you construct a chord scaffold for a music score." , "Here you can puruse commonly used chord progression, create your own progressions and build your own score based off the progressions of your choice."] 
     end
     def mm_message
         [
