@@ -45,7 +45,7 @@ class CLI
             self.display(params[:help_message]) if input == "help"
             break params[:keywords][input.downcase.to_sym].call if params[:keywords].keys.include?(input.downcase.to_sym) #Stops loop and breaks with method based on the keyword from input
             break input if test_input == true #Stops loop and returns the input if match is true
-            display(params[:help_message]) #Displays a help message when input fails test
+            display(params[:help_message]) if input != "help"#Displays a help message when input fails test
         end
     end
 
@@ -237,8 +237,8 @@ class CLI
         params = request_params({
             prompt: ["What is the key of the song?"], 
             match: "^([A-G])$",
-            help_message: ["Input should be an uppercase letter between A-G."]
-        })
+            
+        },["Input should be an uppercase letter between A-G."])
         input = user_interaction(params)
     end
     
@@ -330,7 +330,7 @@ class CLI
         display(["Choose which measures to delete?"])
         s_m = user_interaction(request_params({prompt: ["Starting measure?"], match: "^[0-9]+$"}))
         e_m = user_interaction(request_params({prompt: ["Ending measure?"], match: "^[0-9]+$"}))
-
+        binding.pry
         score.delete_measures(s_m,e_m)
         self.display_all_measures(score)
         self.edit_score_menu(score)

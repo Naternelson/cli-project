@@ -17,12 +17,14 @@ class Score
             end
         }
     end
+
+    #return the number of measures in this score
     def num_of_measures
         (self.chords.count / self.beats_per_measure.to_f).ceil
     end
 
+    #Deletes measures from user input
     def delete_measures(start, end_measure)
-
         start_index = (start.to_i * self.beats_per_measure.to_i)-self.beats_per_measure.to_i-1
         end_index = (end_measure.to_i * self.beats_per_measure.to_i)-1
         i = start_index
@@ -32,22 +34,13 @@ class Score
         end
     end
 
-    def get_measure_chords(int)
-        arr = []
-        self.measure[int.to_i -1].chords.each do |chord|
-            hash = {
-                value: chord.value,
-                beats: chord.beats
-            }
-            arr << hash
-        end
-        arr
-    end
+    #Takes the assciated progressions and transposes their chords
     def transpose(key)
         self.progressions.each {|prog| prog.transpose_and_save(key)}
         self.key = key
     end
 
+    #Returns an array of chords in measure format
     def measure_format
         i = 1
         arr = []

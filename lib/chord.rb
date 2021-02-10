@@ -14,10 +14,11 @@ class Chord
         "vi" => {type: "Minor", notes: [9,0,4]},
         "vii" => {type: "Minor", notes: [11,2,5]}
     }
-    # attr_accessor :beats
+
     attr_reader :chord, :scale, :root, :value
+    
+    #Creates a new chord and retrieves its chord array, the scale array, and the base value
     def initialize(root:, scale:)
-        # self.beats = beats
         @root = NOTES[root]
         @scale = CHORDS[scale]
         chord_notes = self.scale[:notes]
@@ -25,6 +26,8 @@ class Chord
         self.make_chord(self.root, chord_notes)
         @value = self.scale[:type] == "Minor" ? "#{self.chord[0]} min" : self.chord[0]  
     end
+
+    #Adds notes to chord
     def make_chord(base, chord_notes)
         chord_notes.each do |c|
             note = c + base 
@@ -34,18 +37,23 @@ class Chord
         end
     end
     
+    #transpose this chord
     def transpose(new_root)
         @root = NOTES[new_root]
         @chord = []
         make_chord(self.root, self.scale[:notes])
         @value = self.scale[:type] == "Minor" ? "#{self.chord[0]} min" : self.chord[0]  
     end
-    def self.chord_key(hash)
-        CHORDS.key(hash)
-    end
+
+    # def self.chord_key(hash)
+    #     CHORDS.key(hash)
+    # end
+
+    #Class method to retrieve CHORDS
     def self.chords 
         CHORDS
     end
+    #Class method to retrieve NOTES
     def self.notes 
         NOTES
     end

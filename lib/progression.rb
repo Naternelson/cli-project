@@ -8,6 +8,7 @@ class Progression
         @scores = []
     end
 
+    #Saves this Progression if it hasn't already been saved
     def save
         if !self.class.all.include?(self)
             self.class.all << self  
@@ -23,10 +24,12 @@ class Progression
         self.chords
     end
 
+    #Creates and adds a chord to the progression
     def add_chord(scale, beats)
         beats.to_i.times{self.chords << Chord.new(root:self.key, scale: scale)}
     end
 
+    #Associates a score with this progression
     def add_score(score)
         self.scores << score
     end
@@ -52,24 +55,30 @@ class Progression
     #Changes the Instance Variables to the new chords
     def transpose_and_save(key)
         self.transpose(key)
-        # self.delete_chords
         @key = key
     end
 
+    #Removes all chords
     def delete_chords
         @chords.clear
     end
 
+    #Returns chord's base value
     def chord_values(chords=self.chords)
         chords.each_with_index.collect{|chord, i| chord.value if chords[i-1] != chord.value}
     end
 
+    #Returns the total number of beats in this progression
     def total_beats
         self.chords.count
     end
+
+    #Returns every saved instance 
     def self.all
         @@all
     end
+
+    #Returns progressions associated with a certain score
     def self.get_progressions_from_score(score)
         self.all.select {|prog| prog.scores.include?(score)}
     end
