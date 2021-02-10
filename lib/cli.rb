@@ -50,13 +50,13 @@ class CLI
     end
 
     #Change request paramaters, returns new parameters
-    def request_params(add_hash={}, help=self.help_message)
+    def request_params(add_hash={}, help=[])#=self.help_message)
         hash = {
             :keywords => { #Standard list of keywords. If user types any of the keywords, it should activates its coresponding method.
                 main: method(:main_menu), #Returns to the Main Menu
                 exit: method(:exit_app) #Exits out of App
             },
-            :help_message => help
+            :help_message => self.help_message + [" "] +help
         }
         add_hash.merge(hash) #Returns the standard hash, combined with additional parameters in the add_hash
     end
@@ -216,7 +216,7 @@ class CLI
     end
     def change_key(score)
         display(["Current key:  #{score.key}"])
-        params = request_params({prompt: ["What would you like to change the Key to?"], match: "^([A-G])$"})
+        params = request_params({prompt: ["What would you like to change the Key to?"], match: "^([A-G])$"}, ["Choose a key between A-G"])
         input = user_interaction(params)
         score.transpose(input)
         edit_score_menu(score)
@@ -255,9 +255,8 @@ class CLI
     def get_song_bpm
         params = request_params({
             prompt: ["How many beats per measure?"], 
-            match: "^([1-9])|([1][0-6])$",
-            help_message: ["BPM should be between 1-16."]
-        })
+            match: "^([1-9]$)|(1[0-6]$)"
+        }, ["BPM should be between 1-16."])
         self.user_interaction(params)
     end
 
@@ -360,18 +359,19 @@ class CLI
 
     def create_prog(progression,score)
         chords = Chord.chords.keys
-        params = request_params({
-            prompt: ["What chord would you like to add? - Type 'stop' to finish the progression"],
-            match: "^([1-7])(-)(([0-9])|(1[0-6]))|(stop)$",
-            help_message: ["Please use chord - beats notation (ie 1-4)"]
-        })
+        params = request_params(
+            {
+                prompt: ["What chord would you like to add? - Type 'stop' to finish the progression"],
+                match: "^([1-7])(-)(([0-9])|(1[0-6]))|(stop)$",
+            },
+            ["Please use chord - beats notation (ie 1-4)", "Please check progression is between 1-7", "Please check beats is a number between 1-16"]
+        )
         loop do 
             input = user_interaction(params)
             break input if input == "stop"
-
             string_arr = input.split("-")
             progression.add_chord(chords[string_arr[0].strip.to_i - 1], string_arr[1].strip.to_i)
-            puts "#{progression.chords.last.value} - #{string_arr[1].to_i} beats"
+            display(["#{progression.chords.last.value}  -----  #{string_arr[1].to_i} beats"])
         end
         self.save_progression(progression,score)
     end

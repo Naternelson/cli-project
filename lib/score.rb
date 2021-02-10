@@ -52,7 +52,6 @@ class Score
         i = 1
         arr = []
         measure = []
-        binding.pry
         self.chords.each do |chord|
             measure << chord.value
             if measure.count == self.beats_per_measure.to_i
