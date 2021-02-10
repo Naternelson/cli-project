@@ -8,7 +8,7 @@ class CLI
         self.main_menu if start
     end
 
-    def self.help_message 
+    def help_message 
         ["'help' To see a list of options", "'main' To return to the main menu", "'exit' To Exit out of the app"]
     end
 
@@ -40,8 +40,8 @@ class CLI
         loop do 
             display(params[:prompt]) if params[:prompt] #Calls display with prompt if prompt is provided
             input = gets.chomp #Retrieves User input
-            test_input = true  #Returns True if there isn't a match key, or if a Regexp is found, false otherwise
-            test_input = !!input.match(Regexp.new(params[:match])) if params[:match]
+            test_input = true  
+            test_input = !!input.match(Regexp.new(params[:match])) if params[:match] #Returns True if there isn't a match key, or if a Regexp is found, false otherwise
             self.display(params[:help_message]) if input == "help"
             break params[:keywords][input.downcase.to_sym].call if params[:keywords].keys.include?(input.downcase.to_sym) #Stops loop and breaks with method based on the keyword from input
             break input if test_input == true #Stops loop and returns the input if match is true
@@ -140,8 +140,10 @@ class CLI
     def sm_options
         [method(:create_score), method(:nil_option), method(:main_menu)]
     end
+
     def nil_option
         display(["This item has not been added quite yet"])
+        self.main_menu
     end
 
     def scores_menu
@@ -197,7 +199,7 @@ class CLI
 
     #Song Methods#
     def edit_song(score)
-        get_multi_choice_response(song_message, song_options,score)
+        get_multi_choice_response(song_message, song_options, score)
         self.edit_score_menu(score)
     end
     def change_name(score)
@@ -316,7 +318,6 @@ class CLI
     end
 
     def display_all_measures(score)
-        binding.pry
         measures = score.measure_format
         display([score.name, "MEASURES"] + measures)
         edit_score_menu(score)
@@ -346,7 +347,6 @@ class CLI
         repeat = user_interaction(request_params({prompt: ["How many times would you like this progression to repeat?"], match: "^[0-9]+$"}))
         score.add_chords_from_progression(all_prog[choice.to_i-1],repeat.to_i)
         display(["Measures added to score"])
-        binding.pry
         self.display_all_measures(score)
         self.scores_menu
     end
@@ -377,7 +377,6 @@ class CLI
     end
 
     def save_progression(progression, score)
-        binding.pry
         display(progression.chord_values)
         params = request_params({prompt: ["Would you like to save this progression? y/n"], match: "^[yn]$"})
         save_prog = user_interaction(params)
